@@ -9,12 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.awt.print.Book;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/books/")
 @Slf4j
 public class BookController {
 
@@ -22,23 +20,25 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public ResponseEntity<List<Books>> findAllBooks(){
-        return ResponseEntity.ok(bookService.findAll());
+    public ResponseEntity<List<Books>> findAllBooks(@RequestParam(required = false) String name,
+                                                    @RequestParam(required = false) String genre,
+                                                    @RequestParam(required = false) boolean isAvailable){
+        return ResponseEntity.ok(bookService.findAll(name,genre, isAvailable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Books> findBookById(String id){
+    public ResponseEntity<Books> findBookById(@PathVariable String id){
         return ResponseEntity.ok(bookService.findById(id));
     }
 
 
     @PostMapping
-    public ResponseEntity<Books> saveBook(Books book){
+    public ResponseEntity<Books> saveBook(@Validated @RequestBody Books book){
         return ResponseEntity.ok(bookService.save(book));
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBook(@Validated @PathVariable String id, @RequestBody Books book) {
+    public void updateBook(@PathVariable String id, @Validated @RequestBody Books book) {
         bookService.update(id, book);
     }
     @DeleteMapping("/{id}")
