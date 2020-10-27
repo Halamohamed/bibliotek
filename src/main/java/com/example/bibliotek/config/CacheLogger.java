@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehcache.event.CacheEvent;
 import org.ehcache.event.CacheEventListener;
 
-import javax.cache.event.CacheEntryListener;
+
 
 @Slf4j
 public class CacheLogger implements CacheEventListener<Object, Object> {
