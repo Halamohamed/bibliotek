@@ -1,6 +1,7 @@
 package com.example.bibliotek.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

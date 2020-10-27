@@ -19,7 +19,7 @@ public class Books implements Serializable {
     @Id
     private String id;
     @NotEmpty(message = "Book name can not be empty")
-    @Size(min = 3, max = 12, message = "Book name length invalid")
+    @Size(min = 3, max = 20, message = "Book name length invalid")
     private String name;
     @NotBlank(message = "Isbn must contain a value")
     @Size(min = 5, max = 20, message = "Isbn length invalid")

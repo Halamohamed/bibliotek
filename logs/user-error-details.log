@@ -1,1 +1,1 @@
-{"@timestamp":"2020-10-25T20:28:53.463+01:00","@version":"1","severity":"ERROR","service":"bibliotek Rest-Application","pid":"17476","thread":"http-nio-8070-exec-6","class":"com.example.bibliotek.services.UserService","message":"Could not find the user by id 5f95cfc0062e9c6bd7009f3."}
+{"@timestamp":"2020-10-27T11:22:32.746+01:00","@version":"1","severity":"ERROR","service":"bibliotek Rest-Application","pid":"18340","thread":"http-nio-8070-exec-6","class":"com.example.bibliotek.services.BookService","message":"Book id  not available 5f95d647defe5c0c566bd5c8"}

@@ -4,7 +4,9 @@ import com.example.bibliotek.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -32,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/open/**").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/books").permitAll()
+                .antMatchers("/**").authenticated()
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(entryPoint)
