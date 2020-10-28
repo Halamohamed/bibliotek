@@ -4,12 +4,17 @@ import com.example.bibliotek.entities.Books;
 import com.example.bibliotek.services.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,7 +28,9 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-
+    @Value("classpath:/src/main/resources/static/uploads")
+    Resource resourceFile;
+    
     /**
      * Find all books response entity.
      *

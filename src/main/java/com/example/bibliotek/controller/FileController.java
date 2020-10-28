@@ -15,13 +15,22 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * The type File controller.
+ */
 @RestController
 @RequestMapping("/api/books/files")
 public class FileController {
     private static String currentDirectory = System.getProperty("user.dir");
     private static String uploadDirectory = currentDirectory + "/src/main/resources/static/uploads";
+    /**
+     * The Supported file extensions.
+     */
     final List<String> supportedFileExtensions = List.of(".png,.jpg,.jpeg,.gif".split(","));
 
+    /**
+     * Init.
+     */
     @PostConstruct
     public void init(){
         File uploadsPath = new File(uploadDirectory);
@@ -31,6 +40,12 @@ public class FileController {
         System.out.println("***" + uploadsPath);
     }
 
+    /**
+     * Upload image response entity.
+     *
+     * @param file the file
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<String> uploadImage(@RequestParam MultipartFile file){
         var filename = file.getOriginalFilename();
