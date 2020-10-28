@@ -30,22 +30,24 @@ public class BookController {
 
     @Value("classpath:/src/main/resources/static/uploads")
     Resource resourceFile;
-    
+
     /**
      * Find all books response entity.
      *
-     * @param name        the name
+     * @param name        the book name
      * @param genre       the genre
-     * @param isAvailable the is available
+     * @param author       the author
+     * @param isAvailable the book is available
      * @return the response entity
      */
     @GetMapping
     public ResponseEntity<List<Books>> findAllBooks(@RequestParam(required = false) String name,
                                                     @RequestParam(required = false) String genre,
-                                                    @RequestParam(required = false) boolean isAvailable){
+                                                    @RequestParam(required = false) boolean isAvailable,
+                                                    @RequestParam(required = false) String author){
         log.info("getting books with name " + name);
         log.warn("Refresh to get books");
-        return ResponseEntity.ok(bookService.findAll(name,genre, isAvailable));
+        return ResponseEntity.ok(bookService.findAll(name,genre,author, isAvailable));
     }
 
     /**

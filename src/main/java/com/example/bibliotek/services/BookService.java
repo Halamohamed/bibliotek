@@ -37,7 +37,7 @@ public class BookService {
      * @return the list books
      */
     @Cacheable(value = "bookCache")
-    public List<Books> findAll(String name, String genre, boolean available){
+    public List<Books> findAll(String name, String genre,String author, boolean available){
         log.info("Request to find all books");
         log.warn("Refresh to get books");
         var books = bookRepository.findAll();
@@ -49,6 +49,11 @@ public class BookService {
         if(genre != null){
             books = books.stream()
                     .filter(book -> book.getGenre().toLowerCase().equals(genre.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if(author != null){
+            books = books.stream()
+                    .filter(book -> book.getAuthor().toLowerCase().equals(author.toLowerCase()))
                     .collect(Collectors.toList());
         }
         if(available){
@@ -148,7 +153,6 @@ public class BookService {
      */
     @CachePut(value = "bookCache", key = "#id")
     public Books returnBook(String id, Books book){
-        //var id = book.getId();
         log.info("return back a book.");
         notExist(id, bookRepository.existsById(id), "Could not find book by id %s", "not found book by id %s");
 
