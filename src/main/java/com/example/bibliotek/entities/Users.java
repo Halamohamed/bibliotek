@@ -1,6 +1,8 @@
 package com.example.bibliotek.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +44,8 @@ public class Users implements Serializable {
     private String username;
     @Size(min = 4, max = 10, message = "Password length invalid")
     @NotBlank(message = "Password must contain a value")
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private List<Roles> roles;
 
