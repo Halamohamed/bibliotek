@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class BookService {
      * @return the list books
      */
     @Cacheable(value = "bookCache")
-    public List<Books> findAll(String name, String genre,String author, boolean available){
+    public List<Books> findAll(String name, String genre,String author,boolean sortByName, boolean available){
         log.info("Request to find all books");
         log.warn("Refresh to get books");
         var books = bookRepository.findAll();
@@ -56,9 +57,12 @@ public class BookService {
                     .filter(book -> book.getAuthor().toLowerCase().equals(author.toLowerCase()))
                     .collect(Collectors.toList());
         }
+        if(sortByName){
+            books.sort(Comparator.comparing(Books::getName));
+        }
         if(available){
-            books.stream()
-                    .filter(book -> book.isAvailable() == available)
+            books = books.stream()
+                    .filter(book -> book.isAvailable())
                     .collect(Collectors.toList());
         }
         return books;

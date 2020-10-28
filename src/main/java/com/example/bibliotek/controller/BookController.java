@@ -43,11 +43,12 @@ public class BookController {
     @GetMapping
     public ResponseEntity<List<Books>> findAllBooks(@RequestParam(required = false) String name,
                                                     @RequestParam(required = false) String genre,
-                                                    @RequestParam(required = false) boolean isAvailable,
-                                                    @RequestParam(required = false) String author){
+                                                    @RequestParam(required = false) String author,
+                                                    @RequestParam(required = false) boolean sort,
+                                                    @RequestParam(required = false) boolean isAvailable){
         log.info("getting books with name " + name);
         log.warn("Refresh to get books");
-        return ResponseEntity.ok(bookService.findAll(name,genre,author, isAvailable));
+        return ResponseEntity.ok(bookService.findAll(name,genre,author,sort, isAvailable));
     }
 
     /**
