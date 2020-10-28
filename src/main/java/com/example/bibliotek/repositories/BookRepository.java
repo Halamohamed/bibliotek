@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The interface Book repository.
@@ -20,4 +21,7 @@ public interface BookRepository extends MongoRepository<Books, String> {
      */
     List<Books> findBooksByIsAvailable(boolean available);
 
+    Optional<Books> findBooksByIsbn(String isbn);
+
+    List<Books> findBooksByPlotContains(String plot);
 }

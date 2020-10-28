@@ -28,6 +28,9 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    /**
+     * The constant resourceFile.
+     */
     @Value("classpath:/src/main/resources/static/uploads")
     Resource resourceFile;
 
@@ -36,7 +39,8 @@ public class BookController {
      *
      * @param name        the book name
      * @param genre       the genre
-     * @param author       the author
+     * @param author      the author
+     * @param sort        the sort
      * @param isAvailable the book is available
      * @return the response entity
      */
@@ -62,6 +66,31 @@ public class BookController {
     public ResponseEntity<Books> findBookById(@PathVariable String id){
         return ResponseEntity.ok(bookService.findById(id));
     }
+
+    /**
+     * Find book by isbn response entity.
+     *
+     * @param isbn the book isbn
+     * @return the response entity
+     */
+    @Secured({"ROLE_ADMIN","ROLE_USER","ROLE_EDITOR"})
+    @GetMapping("/isbn/{isbn}")
+    public ResponseEntity<Books> findBookByIsbn(@PathVariable String isbn){
+        return ResponseEntity.ok(bookService.findByIsbn(isbn));
+    }
+
+    /**
+     * Find book by plot response entity.
+     *
+     * @param plot the plot
+     * @return the response entity
+     */
+    @Secured({"ROLE_ADMIN","ROLE_USER","ROLE_EDITOR"})
+    @GetMapping("/plot/{plot}")
+    public ResponseEntity<List<Books>> findBookByPlot(@PathVariable String plot){
+        return ResponseEntity.ok(bookService.findByPlot(plot));
+    }
+
 
     /**
      * Save book response entity.
@@ -109,7 +138,7 @@ public class BookController {
     @Secured({"ROLE_ADMIN","ROLE_USER","ROLE_EDITOR"})
     @PutMapping("/loan/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void loanBook( @PathVariable String id, @Validated @RequestBody Books book) { //@PathVariable String id
+    public void loanBook( @PathVariable String id, @Validated @RequestBody Books book) {
         bookService.loanBook(id, book);
     }
 

@@ -32,9 +32,11 @@ public class BookService {
     /**
      * Find all list.
      *
-     * @param name      the name of book
-     * @param genre     the genre of books
-     * @param available the available of books to loan
+     * @param name       the name of book
+     * @param genre      the genre of books
+     * @param author     the author
+     * @param sortByName the sort by name
+     * @param available  the available of books to loan
      * @return the list books
      */
     @Cacheable(value = "bookCache")
@@ -78,6 +80,31 @@ public class BookService {
     public Books findById(String id){
         return bookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 String.format("book not found %s.", id)));
+    }
+
+    /**
+     * Find by isbn books.
+     *
+     * @param isbn the isbn
+     * @return the books
+     */
+    @Cacheable(value = "bookCache", key = "#isbn")
+    public Books findByIsbn(String isbn){
+        return bookRepository.findBooksByIsbn(isbn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("book not found by isbn %s.", isbn)));
+    }
+
+    /**
+     * Find by plot list.
+     *
+     * @param plot the plot
+     * @return the list
+     */
+    @Cacheable(value = "bookCache", key = "#plot")
+    public List<Books> findByPlot(String plot){
+        return bookRepository.findAll().stream()
+                .filter(p -> p.getPlot().toLowerCase().contains(plot))
+                .collect(Collectors.toList());
     }
 
     /**
