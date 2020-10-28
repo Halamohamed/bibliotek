@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Book service.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +28,14 @@ public class BookService {
     //private final UserService userService;
 
 
+    /**
+     * Find all list.
+     *
+     * @param name      the name of book
+     * @param genre     the genre of books
+     * @param available the available of books to loan
+     * @return the list books
+     */
     @Cacheable(value = "bookCache")
     public List<Books> findAll(String name, String genre, boolean available){
         log.info("Request to find all books");
@@ -48,18 +59,36 @@ public class BookService {
         return books;
     }
 
+    /**
+     * Find by id book.
+     *
+     * @param id the book id
+     * @return the book by id
+     */
     @Cacheable(value = "bookCache", key = "#id")
     public Books findById(String id){
         return bookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 String.format("book not found %s.", id)));
     }
 
+    /**
+     * Save book.
+     *
+     * @param book the book to save
+     * @return the book saved
+     */
     @CachePut(value = "bookCache", key = "#result.id")
     public Books save(Books book){
         log.info("saving book.");
         return bookRepository.save(book);
     }
 
+    /**
+     * Update book.
+     *
+     * @param id   the book id
+     * @param book the book to update
+     */
     @CachePut(value = "bookCache", key = "#id")
     public void update(String id, Books book){
         log.info("update a book.");
@@ -76,12 +105,24 @@ public class BookService {
         }
     }
 
+    /**
+     * Delete book.
+     *
+     * @param id the book id to delete
+     */
     @CacheEvict(value = "bookCache", key = "#id")
     public void delete(String id){
         notExist(id, bookRepository.existsById(id), "Could not find book by id %s", "Could not find book by id %s");
         bookRepository.deleteById(id);
     }
 
+    /**
+     * Loan book if available from library .
+     *
+     * @param id   the book id
+     * @param book the book to loan
+     * @return the book if available, if not exaption
+     */
     @CachePut(value = "bookCache", key = "#id")
     public Books loanBook( String id, Books book){
         log.info("loan a book.");
@@ -98,6 +139,13 @@ public class BookService {
         notExist(id, available, s, s2);
     }
 
+    /**
+     * Return book to library and make it available.
+     *
+     * @param id   the book id
+     * @param book the book
+     * @return the book returned
+     */
     @CachePut(value = "bookCache", key = "#id")
     public Books returnBook(String id, Books book){
         //var id = book.getId();
@@ -106,11 +154,7 @@ public class BookService {
 
         var loanedBook = bookRepository.findById(id);
         loaned(id,!loanedBook.get().isAvailable(),"Book id is not available %s","Book not available by id %s");
-       /* if(!bookRepository.findBooksByIsAvailable(true).contains(book)){
-            log.error(String.format("Book id  not available %s", id));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("not available book by id %s", id));
-        }*/
+      
         loanedBook.get().setId(id);
         loanedBook.get().setAvailable(true);
         bookRepository.save(loanedBook.get());
